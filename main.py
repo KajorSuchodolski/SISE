@@ -1,16 +1,32 @@
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+import argparse
+import itertools
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+def parse():
+    parser = argparse.ArgumentParser(description='Arguments for the Fifteen solver')
+    parser.add_argument('strategy', type=str, help='Choose problem solving strategy')
+    parser.add_argument('strategy_parameter', type=str, help='Choose strategy parameter')
+    parser.add_argument('start_textfile', type=str, help='Add the start file')
+
+    config = parser.parse_args()
+
+    if config.strategy not in ('bfs', 'dfs', 'astr'):
+        raise Exception('Wrong strategy choice')
+
+    if (config.strategy == 'bfs' or config.strategy == 'dfs')\
+            and config.strategy_parameter not in itertools.permutations('RLUD', 4):
+        raise Exception('Wrong strategy parameter choice for bfs/dfs parameter')
+
+    if config.strategy == 'astr' and config.strategy_parameter not in ('hamm', 'manh'):
+        raise Exception('Wrong strategy parameter choice for astr parameter')
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+def main():
+    parse()
+
+
+
+main()
+
+
