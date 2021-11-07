@@ -6,6 +6,7 @@ class Node:
         self.parent_node = parent_node
         self.depth = depth
         self.sequence = sequence
+        self.visited = False
 
         self.rows = rows
         self.cols = cols
