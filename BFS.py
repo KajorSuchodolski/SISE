@@ -11,15 +11,13 @@ class BFS:
         self.cols = cols
         self.zero_loc = zero_loc
 
-    def create_child_nodes(self, parent):     # tworzenie
-        possible_solutions = {}
+    def create_child_nodes(self, parent):
+        child_nodes_parents = {}
 
         for s in self.strategy_parameter:           # ['L', 'R', 'U', 'D']
-            status = parent.move(s, self.zero_loc)[1]
-            if status:
-                possible_solutions[s] = [parent.move(s, self.zero_loc)[0], parent]
+            child_nodes_parents[s] = parent.create_one_child(s, zero_location)
 
-        return possible_solutions  # zwraca nam np zestaw {'L': [nowa_tablica, poprzednik] 'R': [nowa_tablica2, poprzednik]}
+        return child_nodes_parents  # zwraca nam np zestaw {'L': [nowa_tablica, poprzednik] 'R': [nowa_tablica2, poprzednik]}
 
     def bfs_algorithm(self):
         root = Node(self.starting_board, self.parent_node, self.depth, self.sequence, self.rows, self.cols)  # początkowy root

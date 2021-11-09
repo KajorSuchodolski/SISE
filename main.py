@@ -2,7 +2,8 @@ import argparse
 import itertools
 from Board import Board
 from BFS import BFS
-zero_location = {}
+from functions import create_fifteen_table, create_goal_board
+
 # def parse():
 #     parser = argparse.ArgumentParser(description='Arguments for the Fifteen solver')
 #     parser.add_argument('strategy', type=str, help='Choose problem solving strategy')
@@ -71,15 +72,9 @@ def create_goal_board(w, k):
     return goal_board
 
 
-def get_zero_loc(rows, cols, board):
-    for r in range(rows):
-        for c in range(cols):
-            if board[r][c] == 0:
-                return r, c
-
-
 def main():
     # board = Board(5, 5)
+
 
     strategy_parameter = ['L', 'R', 'D', 'U'] # sample parameter
 
@@ -88,10 +83,6 @@ def main():
 
     initial_board = create_fifteen_table('input.txt')[2]
     print(initial_board)
-
-    zero_loc = get_zero_loc(rows, cols, initial_board)
-
-    bfs = BFS(initial_board, strategy_parameter, goal_board, rows, cols)
 
 
 
