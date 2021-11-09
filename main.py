@@ -28,49 +28,6 @@ from functions import create_fifteen_table, create_goal_board
 #     return config
 
 
-def create_fifteen_table(config):
-    with open(config, 'r') as f:
-        values = f.readline()
-        values = values.strip()
-        values = values.split(" ")
-        values = list(map(int, values))
-        x = values[0]
-        y = values[1]
-
-        board = []
-
-        for i in range(0, x):
-            row = []
-            lines = f.readline()
-            lines = lines.strip()
-            lines = lines.split(" ")
-            lines = list(map(int, lines))
-            for j in range(0, y):
-                row.append(lines[j])
-            board.append(row)
-
-        return x, y, board
-
-
-def create_goal_board(w, k):
-    goal_board = []
-    numbers = []
-
-    for i in range(1, w * k):     # create a list of numbers 1...w*k and append 0
-        numbers.append(i)
-    numbers.append(0)
-
-    numbers_iter = iter(numbers)
-
-    for i in range(0, w):
-        row = []
-        for j in range(0, k):
-            row.append(next(numbers_iter))
-
-        goal_board.append(row)
-
-    return goal_board
-
 
 def main():
     # board = Board(5, 5)

@@ -1,15 +1,18 @@
 from Node import Node
+from functions import ZERO_POSITION, ROWS, COLS
 
 
 class BFS:
-    def __init__(self, starting_board, strategy_parameter, goal_board, rows, cols, zero_loc):
-        self.starting_board = starting_board
-        self.strategy_parameter = strategy_parameter
-        self.goal_board = goal_board
+    def __init__(self, LRUD_sequence, root_node):
+        # self.starting_board = starting_board
+        self.LRUD_sequence = LRUD_sequence
+        self.root_node = root_node
+        # self.goal_board = goal_board
+        #
+        # self.rows = rows
+        # self.cols = cols
+        # self.zero_loc = zero_loc
 
-        self.rows = rows
-        self.cols = cols
-        self.zero_loc = zero_loc
 
     def create_child_nodes(self, parent):
         child_nodes_parents = {}

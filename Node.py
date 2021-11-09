@@ -64,7 +64,7 @@ class Node:
                 return new_board, status
 
         if direction == 'D':
-            if (row + 1) < self.rows:
+            if (row + 1) < len(self.board):
                 status = True
                 new_board = parent_node.board.copy()
 
