@@ -30,15 +30,13 @@ from functions import create_fifteen_table, create_goal_board
 
 
 def main():
-    # board = Board(5, 5)
+    strategy_parameter = ['L', 'R', 'D', 'U']
 
+    initial_board = create_fifteen_table('input.txt')[0]
+    w, k = create_fifteen_table('input.txt')[1], create_fifteen_table('input.txt')[2]
 
-    strategy_parameter = ['L', 'R', 'D', 'U'] # sample parameter
+    goal_board = create_goal_board(w, k)
 
-    rows, cols = create_fifteen_table('input.txt')[0], create_fifteen_table('input.txt')[1]
-    goal_board = create_goal_board(rows, cols)
-
-    initial_board = create_fifteen_table('input.txt')[2]
     print(initial_board)
 
 

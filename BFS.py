@@ -1,48 +1,60 @@
+import datetime
 from Node import Node
-from functions import ZERO_POSITION, ROWS, COLS
 
 
 class BFS:
-    def __init__(self, LRUD_sequence, root_node):
-        # self.starting_board = starting_board
-        self.LRUD_sequence = LRUD_sequence
-        self.root_node = root_node
-        # self.goal_board = goal_board
-        #
-        # self.rows = rows
-        # self.cols = cols
-        # self.zero_loc = zero_loc
+    def __init__(self, starting_board, goal_board, LRUD_bfs_sequence):
+        self.LRUD_bfs_sequence = LRUD_bfs_sequence
 
-
-    def create_child_nodes(self, parent):
-        child_nodes_parents = {}
-
-        for s in self.strategy_parameter:           # ['L', 'R', 'U', 'D']
-            child_nodes_parents[s] = parent.create_one_child(s, zero_location)
-
-        return child_nodes_parents  # zwraca nam np zestaw {'L': [nowa_tablica, poprzednik] 'R': [nowa_tablica2, poprzednik]}
+        self.starting_board = starting_board
+        self.goal_board = goal_board
 
     def bfs_algorithm(self):
-        root = Node(self.starting_board, self.parent_node, self.depth, self.sequence, self.rows, self.cols)  # początkowy root
-        possible_solutions_for_node = {'ROOT', [root, root]}
-        possible_solutions_for_depth = [{'ROOT', [root, root]}]
+        children_queue = []
+        visited_queue = []
 
-        # possible_solutions - dla kazdego node'a np {'L': [nowa_tablica, poprzednik] 'R': [nowa_tablica2, poprzednik]}
-        # possible_solutions_for_depth - dla kazdej glebokosci np [[{'L': [nowa_tablica, poprzednik] 'R': [nowa_tablica2, poprzednik]}],
-        # [{'U': [nowa_tablica3, poprzednik] 'D': [nowa_tablica4, poprzednik]}]]
-        while True:
-            for p_depth in possible_solutions_for_depth:
-                for p in possible_solutions_for_node:            # dla każdego roota odchodzacego od roota
-                    possible_solutions_for_node = self.create_child_nodes(p)
-                    if self.goal_board in possible_solutions_for_node.values()[0]:
-                        print("Solution found")
-                        break
-                    possible_solutions_for_depth.append(possible_solutions_for_node)
+        LRUD_solution_sequence = []
+        solution_length = 0
+        depth = 0
 
+        start_time = datetime.datetime.now()
 
+        root = Node(self.starting_board, None, None, ['bfs'])
 
+        if root.board == self.goal_board:
+            print('Solution found')
+        else:
+            visited_queue.append(root)
 
+            while visited_queue:
+                for visited in visited_queue:   # kazdy wezel z glebokosci
+                    for direction in self.LRUD_bfs_sequence:
+                        children_queue.append(visited.create_one_child(direction)) # kolejka dzieci kazdego wezla
+                    visited_queue.pop(0)
 
+                depth += 1
 
+                while children_queue:
+                    for sibling in children_queue:
+                        if sibling.board == self.goal_board:
+                            print('Solution found')
 
+                            while sibling is not None:
+                                LRUD_solution_sequence.append(sibling.direction)
+                                sibling = sibling.parent_node
+                                solution_length += 1
 
+                                end_time = datetime.datetime.now()
+                                exec_time = (end_time - start_time).total_seconds() * 1000
+
+                            return LRUD_solution_sequence, solution_length, depth, exec_time
+                        else:
+                            visited_queue.append(sibling)
+                    children_queue.pop(0)
+
+            end_time = datetime.datetime.now()
+            exec_time = (end_time - start_time).total_seconds() * 1000
+
+            solution_length = -1
+
+        return solution_length, depth, exec_time

@@ -1,5 +1,12 @@
-ZERO_POSITION = [[]]
-ROWS, COLS = None, None
+ZERO_POSITION = []
+
+
+def zero_init(board):
+    for i in range(len(board)):
+        for j in range(len(board[0])):
+            if board[i][j] == 0:
+                ZERO_POSITION.append(i)
+                ZERO_POSITION.append(j)
 
 
 def create_fifteen_table(config):
@@ -45,11 +52,4 @@ def create_goal_board(w, k):      # tworzy tablice docelową
         goal_board.append(row)
 
     return goal_board
-
-
-def get_empty_field(board):
-    for i in range(0, len(board)):
-        for j in range(0, len(board[0])):
-            if board[i][j] == 0:
-                return i, j
 
