@@ -1,5 +1,6 @@
 import datetime
 from Node import Node
+from functions import zero_init
 
 
 class BFS:
@@ -29,7 +30,9 @@ class BFS:
             while visited_queue:
                 for visited in visited_queue:   # kazdy wezel z glebokosci
                     for direction in self.LRUD_bfs_sequence:
-                        children_queue.append(visited.create_one_child(direction)) # kolejka dzieci kazdego wezla
+                        child = visited.create_one_child(direction, ['bfs'])
+                        if child is not None:
+                            children_queue.append(child) # kolejka dzieci kazdego wezla
                     visited_queue.pop(0)
 
                 depth += 1
@@ -39,18 +42,21 @@ class BFS:
                         if sibling.board == self.goal_board:
                             print('Solution found')
 
-                            while sibling is not None:
-                                LRUD_solution_sequence.append(sibling.direction)
+                            while sibling:
+                                if sibling.direction is not None:
+                                    LRUD_solution_sequence.append(sibling.direction)
                                 sibling = sibling.parent_node
                                 solution_length += 1
 
-                                end_time = datetime.datetime.now()
-                                exec_time = (end_time - start_time).total_seconds() * 1000
+                            LRUD_solution_sequence.reverse()
+                            end_time = datetime.datetime.now()
+                            exec_time = (end_time - start_time).total_seconds() * 1000
 
                             return LRUD_solution_sequence, solution_length, depth, exec_time
+
                         else:
                             visited_queue.append(sibling)
-                    children_queue.pop(0)
+                            children_queue.pop(0)
 
             end_time = datetime.datetime.now()
             exec_time = (end_time - start_time).total_seconds() * 1000

@@ -2,6 +2,10 @@ ZERO_POSITION = []
 
 
 def zero_init(board):
+    if len(ZERO_POSITION) != 0:
+        ZERO_POSITION.pop()
+        ZERO_POSITION.pop()
+
     for i in range(len(board)):
         for j in range(len(board[0])):
             if board[i][j] == 0:
