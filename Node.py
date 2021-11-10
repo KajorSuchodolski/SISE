@@ -2,7 +2,7 @@ from functions import ZERO_POSITION
 
 
 class Node:
-    def __init__(self, board, direction, parent_node):
+    def __init__(self, board, direction, parent_node, LRUD_sequence):
         self.board = board
         self.children = {}
         self.direction = direction
@@ -62,3 +62,6 @@ class Node:
                 return new_board
 
         return None
+
+    def pop_LRUD_element(self):
+        self.LRUD_sequence.pop(0)

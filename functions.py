@@ -15,23 +15,21 @@ def create_fifteen_table(config):
         values = values.strip()
         values = values.split(" ")
         values = list(map(int, values))
-        global ROWS
-        global COLS
-        ROWS, COLS = values[0], values[1]
+        w, k = values[0], values[1]
         board = []
 
-        for i in range(0, ROWS):
+        for i in range(0, w):
             row = []
             lines = f.readline()
             lines = lines.strip()
             lines = lines.split(" ")
             lines = list(map(int, lines))
 
-            for j in range(0, COLS):
+            for j in range(0, k):
                 row.append(lines[j])
             board.append(row)
 
-        return ROWS, COLS, board
+        return board, w, k
 
 
 def create_goal_board(w, k):      # tworzy tablice docelową
