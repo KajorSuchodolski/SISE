@@ -1,15 +1,12 @@
 ZERO_POSITION = []
 
 
-def get_position(value, board, zero_pos):
+def get_position(value, board):
     for i in range(len(board)):
         for j in range(len(board[0])):
             if board[i][j] == value:
-                if zero_pos:
-                    ZERO_POSITION.append(i)
-                    ZERO_POSITION.append(j)
-                else:
-                    return [i, j]
+                return [i, j]
+
 
 def zero_init(board):
     if len(ZERO_POSITION) != 0:
@@ -46,7 +43,7 @@ def create_fifteen_table(config):
         return board, w, k
 
 
-def create_goal_board(w, k):      # tworzy tablice docelową
+def create_goal_board(w, k):  # tworzy tablice docelową
     goal_board = []
     numbers = []
 

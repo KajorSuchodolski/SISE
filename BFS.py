@@ -1,6 +1,5 @@
 import datetime
 from Node import Node
-from functions import zero_init
 
 
 class BFS:
@@ -19,13 +18,16 @@ class BFS:
         depth = 0
 
         start_time = datetime.datetime.now()
-        nodes = 0
         visited_boards = []
         root = Node(self.starting_board, None, None, ['bfs'])
 
         if root.board == self.goal_board:
             print('Solution found')
-            return 'yes'
+
+            end_time = datetime.datetime.now()
+            exec_time = (end_time - start_time).total_seconds() * 1000
+            return solution_length, depth, exec_time
+
         else:
             parents_queue.append(root)
             visited_boards.append(root.board)
