@@ -1,6 +1,16 @@
 ZERO_POSITION = []
 
 
+def get_position(value, board, zero_pos):
+    for i in range(len(board)):
+        for j in range(len(board[0])):
+            if board[i][j] == value:
+                if zero_pos:
+                    ZERO_POSITION.append(i)
+                    ZERO_POSITION.append(j)
+                else:
+                    return [i, j]
+
 def zero_init(board):
     if len(ZERO_POSITION) != 0:
         ZERO_POSITION.pop()
@@ -54,4 +64,3 @@ def create_goal_board(w, k):      # tworzy tablice docelową
         goal_board.append(row)
 
     return goal_board
-

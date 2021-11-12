@@ -31,16 +31,13 @@ class BFS:
             visited_boards.append(root.board)
 
         while parents_queue:
-            # print("Parents: " + str(parents_queue))
-
+            depth += 1
             for parent in parents_queue:   # kazdy wezel z glebokosci
                 for direction in self.LRUD_bfs_sequence:
                     child = parent.create_one_child(direction, ['bfs'])
                     if child is not None and child.board not in visited_boards:
                         children_queue.append(child)  # kolejka dzieci kazdego wezla ktore nie zwrocily none
-                        # print("Child: " + str(child) + ", Child direction: " + str(child.direction)
-                        #       + ", Parent: " + str(child.parent_node) + ", Parent direction: " + str(child.parent_node.direction))
-                        # nodes += 1
+
             parents_queue.clear()
 
             for child in children_queue:
