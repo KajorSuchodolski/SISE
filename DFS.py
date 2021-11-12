@@ -9,7 +9,7 @@ class DFS:
         self.max_depth = 20
 
     def dfs(self):
-        current_node = Node(self.goal_board, 'Root Node', None, self.LRUD_sequence)
+        current_node = Node(self.goal_board, 'Root Node', None, self.LRUD_sequence, no)
         depth = 0
         goal = []
         visited_nodes = 1
