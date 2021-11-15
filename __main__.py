@@ -1,5 +1,6 @@
 from BFS import BFS
 from DFS import DFS
+from Astar import Astar
 from functions import create_fifteen_table, create_goal_board
 import argparse
 
@@ -44,6 +45,16 @@ def main():
     elif args.algorithm == "bfs":
         bfs = BFS(to_solve_board, original_board, sequence)
         bfs.bfs_algorithm()
+
+    elif args.algorithm == "astr":
+        astr = None
+
+        if sequence == "manh":
+            astr = Astar(to_solve_board, original_board, "manh")
+        elif sequence == "hamm":
+            astr = Astar(to_solve_board, original_board, "hamm")
+
+        astr.a_star()
 
 
 if __name__ == '__main__':

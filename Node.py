@@ -2,18 +2,17 @@ from functions import ZERO_POSITION, zero_init
 
 
 class Node:
-    def __init__(self, board, direction, parent_node, lrud_sequence):
+    def __init__(self, board, direction, parent_node):
         self.board = board
         self.children = {}
         self.direction = direction
         self.parent_node = parent_node
-        self.lrud_sequence = lrud_sequence.copy()
+        # self.lrud_sequence = lrud_sequence.copy()
 
-
-    def create_one_child(self, direction, lrud_sequence):
+    def create_one_child(self, direction):
         new_board = self.move(direction)
         if new_board is not None:
-            node = Node(new_board, direction, self, lrud_sequence)
+            node = Node(new_board, direction, self)
             return node
         else:
             return None         # jesli pozycja zera nie spelnia warunkow do stworzenia dziecka - zwraca None
@@ -85,16 +84,16 @@ class Node:
 
         return None
 
-    def pop_LRUD_element(self):
-        self.lrud_sequence.pop(0)
+    # def pop_LRUD_element(self):
+    #     self.lrud_sequence.pop(0)
 
-    def remove_moves_two(self):
-        if self.direction != 'Root Node':
-            if self.direction == 'L':
-                self.lrud_sequence.remove('R')
-            if self.direction == 'R':
-                self.lrud_sequence.remove('L')
-            if self.direction == 'U':
-                self.lrud_sequence.remove('D')
-            if self.direction == 'D':
-                self.lrud_sequence.remove('U')
+    # def remove_moves_two(self):
+    #     if self.direction != 'Root Node':
+    #         if self.direction == 'L':
+    #             self.lrud_sequence.remove('R')
+    #         if self.direction == 'R':
+    #             self.lrud_sequence.remove('L')
+    #         if self.direction == 'U':
+    #             self.lrud_sequence.remove('D')
+    #         if self.direction == 'D':
+    #             self.lrud_sequence.remove('U')

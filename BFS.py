@@ -19,7 +19,7 @@ class BFS:
         visited_boards = []
 
         start_time = datetime.datetime.now()
-        root = Node(self.starting_board, None, None, ['bfs'])
+        root = Node(self.starting_board, None, None)
 
         if root.board == self.goal_board:
             print('Solution found')
@@ -36,7 +36,7 @@ class BFS:
             depth += 1
             for parent in parents_queue:   # kazdy wezel z glebokosci
                 for direction in self.LRUD_bfs_sequence:
-                    child = parent.create_one_child(direction, ['bfs'])
+                    child = parent.create_one_child(direction)
                     if child is not None and child.board not in visited_boards:
                         children_queue.append(child)  # kolejka dzieci kazdego wezla ktore nie zwrocily none
 

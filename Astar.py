@@ -3,19 +3,30 @@ from functions import get_position
 
 
 class Astar:
-    def __init__(self, starting_board, goal_board):
+    def __init__(self, starting_board, goal_board, method):
         self.starting_board = starting_board
         self.goal_board = goal_board
+        self.method = method
+
+        self.
 
     def manhattan_distance(self, node):
         score = 0
         size = len(node.board) * len(node.board[0])
 
-        for value in range(size - 1):
-            current_row, current_column = get_position(value, node.board)
-            goal_row, goal_column = get_position(value, self.goal_board)
-            score += abs(goal_row - current_row) + abs(goal_column - current_column)
-        return score
+        if self.method == 'manh':
+            for value in range(size - 1):
+                current_row, current_column = get_position(value, node.board)
+                goal_row, goal_column = get_position(value, self.goal_board)
+                score += abs(goal_row - current_row) + abs(goal_column - current_column)
+            return score
+        else:
+            for value in range(size - 1):
+                current_row, current_column = get_position(value, node.board)
+                goal_row, goal_column = get_position(value, self.goal_board)
+                if abs(goal_row - current_row) + abs(goal_column - current_column) != 0:
+                    score += 1
+            return score
 
     def a_star(self):
         directions = ['L', 'R', 'U', 'D']
@@ -25,7 +36,7 @@ class Astar:
         shortest_distance_equals = []
         visited_boards = []
 
-        root = Node(self.starting_board, None, None, ['a_star'])
+        root = Node(self.starting_board, None, None)
 
         if root.board == self.goal_board:
             print('Solution found')
@@ -40,7 +51,7 @@ class Astar:
 
             for parent in parents_queue:
                 for direction in directions:
-                    child = parent.create_one_child(direction, ['a_star'])
+                    child = parent.create_one_child(direction)
                     if child is not None:
                         child_distance = self.manhattan_distance(child)
 
