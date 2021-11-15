@@ -1,43 +1,59 @@
+import time
+
 from Node import Node
 
 
 class DFS:
-    def __init__(self, starting_board, goal_board, LRUD_sequence):
-        self.LRUD_sequence = LRUD_sequence
+    def __init__(self, starting_board, goal_board, lrud_sequence):
+        self.lrud_sequence = lrud_sequence
         self.starting_board = starting_board
         self.goal_board = goal_board
-        self.max_depth = 20
+        self.max_depth: int = 20
+        self.max_depth_visited: int = 0
+        self.visited = []
+        self.done: [[]] = None
+
+        self.processed: int = 0
+        self.visits: int = 0
+        self.time: float = 0.0
 
     def dfs(self):
-        current_node = Node(self.goal_board, 'Root Node', None, self.LRUD_sequence, no)
-        depth = 0
-        goal = []
-        visited_nodes = 1
+        start_time = time.time()
+        current_node = Node(self.starting_board, 'Root Node', None, self.lrud_sequence)
+        self.find_solution(current_node, 0)
+        self.time = (time.time() - start_time) * 1000
+        self.visited.reverse()
 
-        while True:
-            direction = current_node.LRUD_sequence[0]
-            if self.starting_board == current_node.board:
-                return "Hurrra kurwa wygrales wycieczke do tadzykistanu", goal, depth
+    def find_solution(self, node, depth):
 
-            elif depth >= self.max_depth:
-                current_node = current_node.parent_node
-                depth -= 1
-                goal.pop(len(goal) - 1)
+        if self.done is not None:
+            return
 
-            elif len(current_node.LRUD_sequence) != 0:
-                node_tmp = current_node.create_one_child(direction)
+        if depth > self.max_depth_visited:
+            self.max_depth_visited = depth
 
-                if node_tmp is not None:
-                    current_node = node_tmp
-                    depth += 1
-                    goal.append(direction)
+        if depth > self.max_depth:
+            return
 
-                else:
-                    current_node.pop_LRUD_element()
+        if node.board == self.goal_board:
+            self.done = node.board
+            return
 
-            else:
-                current_node = current_node.parent_node
-                depth -= 1
+        self.visits += 1
+        self.processed += 1
 
+        directions = []
+        # w celu gorszego dzialania zakkomentowac
+        node.remove_moves_two()
+        for direction in node.lrud_sequence:
+            if node.move(direction, True):
+                directions.append(direction)
 
+        for direction in directions:
+            node = node.create_one_child(direction, self.lrud_sequence)
+            self.find_solution(node, depth + 1)
 
+            if self.done is not None:
+                self.visited.append(node.direction)
+                return
+        return

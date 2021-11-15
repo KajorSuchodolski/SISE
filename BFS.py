@@ -16,9 +16,9 @@ class BFS:
         LRUD_solution_sequence = []
         solution_length = 0
         depth = 0
+        visited_boards = []
 
         start_time = datetime.datetime.now()
-        visited_boards = []
         root = Node(self.starting_board, None, None, ['bfs'])
 
         if root.board == self.goal_board:

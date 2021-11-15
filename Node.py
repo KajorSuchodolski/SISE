@@ -2,28 +2,31 @@ from functions import ZERO_POSITION, zero_init
 
 
 class Node:
-    def __init__(self, board, direction, parent_node, LRUD_sequence):
+    def __init__(self, board, direction, parent_node, lrud_sequence):
         self.board = board
         self.children = {}
         self.direction = direction
         self.parent_node = parent_node
-        self.LRUD_sequence = LRUD_sequence.copy()  # for DFS
+        self.lrud_sequence = lrud_sequence.copy()
 
-    def create_one_child(self, direction, LRUD_sequence):
+
+    def create_one_child(self, direction, lrud_sequence):
         new_board = self.move(direction)
         if new_board is not None:
-            node = Node(new_board, direction, self, LRUD_sequence)
+            node = Node(new_board, direction, self, lrud_sequence)
             return node
         else:
             return None         # jesli pozycja zera nie spelnia warunkow do stworzenia dziecka - zwraca None
 
-    def move(self, direction):
+    def move(self, direction, flag=False):
         zero_init(self.board)
         row_zero = ZERO_POSITION[0]   # rząd w ktorym jest zero
         col_zero = ZERO_POSITION[1]   # kolumna w ktorej jest zero
 
         if direction == 'L':
             if (col_zero - 1) >= 0:
+                if flag:
+                    return True
                 new_board = []
                 for row in self.board:
                     new_board.append(row.copy())
@@ -37,6 +40,8 @@ class Node:
 
         elif direction == 'R':
             if (col_zero + 1) < len(self.board[0]):
+                if flag:
+                    return True
                 new_board = []
                 for row in self.board:
                     new_board.append(row.copy())
@@ -50,6 +55,8 @@ class Node:
 
         elif direction == 'U':
             if (row_zero - 1) >= 0:
+                if flag:
+                    return True
                 new_board = []
                 for row in self.board:
                     new_board.append(row.copy())
@@ -61,8 +68,10 @@ class Node:
 
                 return new_board
 
-        if direction == 'D':
+        elif direction == 'D':
             if (row_zero + 1) < len(self.board):
+                if flag:
+                    return True
                 new_board = []
                 for row in self.board:
                     new_board.append(row.copy())
@@ -77,4 +86,15 @@ class Node:
         return None
 
     def pop_LRUD_element(self):
-        self.LRUD_sequence.pop(0)
+        self.lrud_sequence.pop(0)
+
+    def remove_moves_two(self):
+        if self.direction != 'Root Node':
+            if self.direction == 'L':
+                self.lrud_sequence.remove('R')
+            if self.direction == 'R':
+                self.lrud_sequence.remove('L')
+            if self.direction == 'U':
+                self.lrud_sequence.remove('D')
+            if self.direction == 'D':
+                self.lrud_sequence.remove('U')

@@ -32,8 +32,8 @@ from functions import create_fifteen_table, create_goal_board
 def main():
     strategy_parameter = ['L', 'R', 'D', 'U']
 
-    initial_board = create_fifteen_table('input.txt')[0]
-    w, k = create_fifteen_table('input.txt')[1], create_fifteen_table('input.txt')[2]
+    initial_board = create_fifteen_table('4x4_01_0001.txt')[0]
+    w, k = create_fifteen_table('4x4_01_0001.txt')[1], create_fifteen_table('4x4_01_0001.txt')[2]
 
     goal_board = create_goal_board(w, k)
 
