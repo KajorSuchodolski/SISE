@@ -3,10 +3,13 @@ from DFS import DFS
 from Astar import Astar
 from functions import create_fifteen_table, create_goal_board
 import argparse
+import itertools
 
 # .\__main__.py bfs LUDR 4x4_01_0001.txt 4x4_01_0001_dfs_ludr_sol.txt 4x4_01_0001_dfs_ludr_stats.txt
 
+
 def main():
+
     parser = argparse.ArgumentParser()
     parser.add_argument("algorithm", type=str)
     parser.add_argument("sequence", type=str)
@@ -21,40 +24,65 @@ def main():
     original_board = create_goal_board(rows, columns)
     sequence = list(args.sequence.upper())
 
+    if args.algorithm not in ("bfs", "dfs", "astr"):
+        raise Exception("Wrong algorithm choice")
+    if args.sequence not in ([list(itertools.permutations(sequence)), 'manh', 'hamm']):
+        raise Exception("Wrong sequence choice")
+
+
     if args.algorithm == "dfs":
-        dfs = DFS(to_solve_board, original_board, sequence)
-        dfs.dfs()
-
-        with open(args.solution, "w") as f_solution:
-            if len(dfs.visited) == 0:
-                f_solution.write("-1")
-            else:
-                f_solution.write(str(len(dfs.visited)) + "\n")
-                f_solution.write(str(dfs.visited))
-
-        with open(args.stats, "w") as f_stats:
-            if len(dfs.visited) == 0:
-                f_stats.write("-1")
-            else:
-                f_stats.write(str(len(dfs.visited)) + "\n")
-                f_stats.write(str(dfs.visits) + "\n")
-                f_stats.write(str(dfs.processed) + "\n")
-                f_stats.write(str(dfs.max_depth_visited) + "\n")
-                f_stats.write(str(round(dfs.time, 3)) + "\n")
+        print('Doesnt work yet')
+        # dfs = DFS(to_solve_board, original_board, sequence)
+        # dfs.dfs()
+        #
+        # with open(args.solution, "w") as f_solution:
+        #     if len(dfs.visited) == 0:
+        #         f_solution.write("-1")
+        #     else:
+        #         f_solution.write(str(len(dfs.visited)) + "\n")
+        #         f_solution.write(str(dfs.visited))
+        #
+        # with open(args.stats, "w") as f_stats:
+        #     if len(dfs.visited) == 0:
+        #         f_stats.write("-1")
+        #     else:
+        #         f_stats.write(str(len(dfs.visited)) + "\n")
+        #         f_stats.write(str(dfs.visits) + "\n")
+        #         f_stats.write(str(dfs.processed) + "\n")
+        #         f_stats.write(str(dfs.max_depth_visited) + "\n")
+        #         f_stats.write(str(round(dfs.time, 3)) + "\n")
 
     elif args.algorithm == "bfs":
         bfs = BFS(to_solve_board, original_board, sequence)
-        bfs.bfs_algorithm()
+        result = bfs.bfs_algorithm()
+
+        with open(args.solution, "w") as f_solution:
+            f_solution.write(str(result[1]) + "\n")        # dlugosc znalezionego rozwiazania
+            if result[0] is not None:
+                LRUD_sequence = ''.join(map(str, result[0]))
+                f_solution.write(LRUD_sequence)        # sekwencja liter
+
+        with open(args.stats, "w") as f_stats:
+            f_stats.write(str(result[1]) + "\n")       # dlugosc rozwiazania
+            f_stats.write(str(result[4]) + "\n")       # liczba stanow odwiedzonych
+            f_stats.write(str(result[5]) + "\n")       # liczba stanow przetworzonych
+            f_stats.write(str(result[2]) + "\n")       # glebokosc
+            f_stats.write(str(result[3]) + "\n")       # dlugosc procesu obliczeniowego w ms
+
 
     elif args.algorithm == "astr":
         astr = None
 
         if sequence == "manh":
             astr = Astar(to_solve_board, original_board, "manh")
+
         elif sequence == "hamm":
             astr = Astar(to_solve_board, original_board, "hamm")
 
         astr.a_star()
+
+
+
 
 
 if __name__ == '__main__':
