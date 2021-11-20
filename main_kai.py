@@ -17,6 +17,8 @@ bfs_algorithm_solution = bfs.bfs_algorithm()[0]
 print(bfs_algorithm_solution)
 
 a_star_manh = Astar(ORIGINAL_BOARD, GOAL, "hamm")
-print(a_star_manh.a_star())
+solution = a_star_manh.a_star()
+print(str(solution[0]) + " " + str(solution[1]) + " " + str(solution[2]) + " " + str(solution[3])
+      + " " + str(solution[4]) + " " + str(solution[5]))
 
 

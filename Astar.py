@@ -1,3 +1,4 @@
+import datetime
 from Node import Node
 from functions import get_position
 
@@ -31,21 +32,37 @@ class Astar:
         directions = ['L', 'R', 'U', 'D']
         LRUD_solution_sequence = []
         parents_queue = []
-        shortest_distance_child = None
         shortest_distance_equals = []
         visited_boards = []
 
+        shortest_distance_child = None
+
+        solution_length = 0
+        depth = 0
+        processed_nodes_stats = 0
+
+
+        start_time = datetime.datetime.now()
         root = Node(self.starting_board, None, None)
+        visited_nodes_stats = 1
 
         if root.board == self.goal_board:
             print('Solution found')
-            return 'yes'
+
+            end_time = datetime.datetime.now()
+            exec_time = (end_time - start_time).total_seconds() * 1000
+            LRUD_solution_sequence = None
+
+            return LRUD_solution_sequence, solution_length, depth, exec_time, visited_nodes_stats, processed_nodes_stats
+
         else:
             parents_queue.append(root)
             shortest_distance = self.manhattan_distance(root)
             visited_boards.append(root.board)
+            processed_nodes_stats += 1
 
         while parents_queue:
+            depth += 1
             shortest_distance_equals.clear()
 
             for parent in parents_queue:
@@ -54,11 +71,17 @@ class Astar:
                     if child is not None:
                         child_distance = self.manhattan_distance(child)
 
-                        if child_distance < shortest_distance and child.board not in visited_boards:
+                        if child.board in visited_boards:
+                            visited_nodes_stats += 1
+
+                        elif child.board not in visited_boards and child_distance < shortest_distance:
                             shortest_distance = child_distance
                             shortest_distance_child = child
                             shortest_distance_equals.append(child)
                             visited_boards.append(child.board)
+
+                            processed_nodes_stats += 1
+                            visited_nodes_stats += 1
 
             parents_queue.clear()
 
@@ -69,6 +92,9 @@ class Astar:
                 else:
                     parents_queue.append(shortest_distance_child)
             else:
+                end_time = datetime.datetime.now()
+                exec_time = (end_time - start_time).total_seconds() * 1000
+
                 print('Solution found')
                 while shortest_distance_child:
                     if shortest_distance_child.direction is not None:
@@ -76,7 +102,15 @@ class Astar:
                     shortest_distance_child = shortest_distance_child.parent_node
                 LRUD_solution_sequence.reverse()
 
-                return LRUD_solution_sequence
+                return LRUD_solution_sequence, solution_length, depth, exec_time,\
+                       visited_nodes_stats, processed_nodes_stats
 
+        end_time = datetime.datetime.now()
+        exec_time = (end_time - start_time).total_seconds() * 1000
+
+        solution_length = -1
+        LRUD_solution_sequence = None
 
         print('Solution not found')
+
+        return LRUD_solution_sequence, solution_length, depth, exec_time, visited_nodes_stats, processed_nodes_stats
