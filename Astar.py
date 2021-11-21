@@ -9,12 +9,11 @@ class Astar:
         self.goal_board = goal_board
         self.method = method
 
-
-    def manhattan_distance(self, node):
+    def check_distance(self, node):
         score = 0
         size = len(node.board) * len(node.board[0])
 
-        if self.method == 'manh':
+        if self.method == 'hamm':
             for value in range(size - 1):
                 current_row, current_column = get_position(value, node.board)
                 goal_row, goal_column = get_position(value, self.goal_board)
@@ -37,7 +36,6 @@ class Astar:
 
         shortest_distance_child = None
 
-        solution_length = 0
         depth = 0
         processed_nodes_stats = 0
 
@@ -47,17 +45,19 @@ class Astar:
         visited_nodes_stats = 1
 
         if root.board == self.goal_board:
-            print('Solution found')
-
             end_time = datetime.datetime.now()
             exec_time = (end_time - start_time).total_seconds() * 1000
+
             LRUD_solution_sequence = None
+            solution_length = 0
+
+            print('Solution found')
 
             return LRUD_solution_sequence, solution_length, depth, exec_time, visited_nodes_stats, processed_nodes_stats
 
         else:
             parents_queue.append(root)
-            shortest_distance = self.manhattan_distance(root)
+            shortest_distance = self.check_distance(root)
             visited_boards.append(root.board)
             processed_nodes_stats += 1
 
@@ -69,7 +69,7 @@ class Astar:
                 for direction in directions:
                     child = parent.create_one_child(direction)
                     if child is not None:
-                        child_distance = self.manhattan_distance(child)
+                        child_distance = self.check_distance(child)
 
                         if child.board in visited_boards:
                             visited_nodes_stats += 1
@@ -95,12 +95,14 @@ class Astar:
                 end_time = datetime.datetime.now()
                 exec_time = (end_time - start_time).total_seconds() * 1000
 
-                print('Solution found')
                 while shortest_distance_child:
                     if shortest_distance_child.direction is not None:
                         LRUD_solution_sequence.append(shortest_distance_child.direction)
                     shortest_distance_child = shortest_distance_child.parent_node
                 LRUD_solution_sequence.reverse()
+                solution_length = len(LRUD_solution_sequence)
+
+                print('Solution found')
 
                 return LRUD_solution_sequence, solution_length, depth, exec_time,\
                        visited_nodes_stats, processed_nodes_stats

@@ -16,7 +16,7 @@ class BFS:
 
         LRUD_solution_sequence = []
 
-        solution_length = 0
+
         depth = 0
         processed_nodes_stats = 0
 
@@ -25,11 +25,12 @@ class BFS:
         visited_nodes_stats = 1
 
         if root.board == self.goal_board:
-            print('Solution found')
-
             end_time = datetime.datetime.now()
             exec_time = (end_time - start_time).total_seconds() * 1000
+
+            solution_length = 0
             LRUD_solution_sequence = None
+            print('Solution found')
 
             return LRUD_solution_sequence, solution_length, depth, exec_time, visited_nodes_stats, processed_nodes_stats
 
@@ -56,7 +57,6 @@ class BFS:
 
             for child in children_queue:
                 if child.board == self.goal_board:
-
                     end_time = datetime.datetime.now()
                     exec_time = (end_time - start_time).total_seconds() * 1000
 
@@ -66,9 +66,9 @@ class BFS:
                         if child.direction is not None:
                             LRUD_solution_sequence.append(child.direction)
                         child = child.parent_node
-                        solution_length += 1
 
                     LRUD_solution_sequence.reverse()
+                    solution_length = len(LRUD_solution_sequence)
 
                     return LRUD_solution_sequence, solution_length, depth, exec_time, \
                            visited_nodes_stats, processed_nodes_stats

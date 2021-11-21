@@ -83,9 +83,9 @@ def main():
         astr = None
 
         if sequence == "manh":
-            manh = Astar(to_solve_board, original_board, "manh")
+            a_star_manh = Astar(to_solve_board, original_board, "manh")
 
-            result = manh.a_star()
+            result = a_star_manh.a_star()
 
             with open(args.solution, "w") as f_solution:
                 f_solution.write(str(result[1]) + "\n")  # dlugosc znalezionego rozwiazania
