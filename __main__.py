@@ -22,11 +22,20 @@ def main():
     solve_board = create_fifteen_table(args.input)
     to_solve_board, rows, columns = solve_board[0], solve_board[1], solve_board[2]
     original_board = create_goal_board(rows, columns)
-    sequence = list(args.sequence.upper())
+    if args.sequence not in ("manh", "hamm"):
+        sequence = tuple(args.sequence.upper())
+    elif args.sequence == "manh":
+        sequence = "manh"
+    else:
+        sequence = "hamm"
+
+    all_sequences = list(itertools.permutations(['L', 'R', 'U', 'D']))
+    all_sequences.append('manh')
+    all_sequences.append('hamm')
 
     if args.algorithm not in ("bfs", "dfs", "astr"):
         raise Exception("Wrong algorithm choice")
-    if args.sequence not in ([list(itertools.permutations(sequence)), 'manh', 'hamm']):
+    if sequence not in all_sequences:
         raise Exception("Wrong sequence choice")
 
 
@@ -75,7 +84,6 @@ def main():
 
         if sequence == "manh":
             manh = Astar(to_solve_board, original_board, "manh")
-            print(str(manh))
 
             result = manh.a_star()
 
