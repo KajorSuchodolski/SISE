@@ -1,6 +1,6 @@
-import datetime
 from Node import Node
 from functions import get_position
+import datetime
 
 
 class Astar:
@@ -9,15 +9,16 @@ class Astar:
         self.goal_board = goal_board
         self.method = method
 
-    def check_distance(self, node):
+    def heuristic_distance(self, node):
         score = 0
         size = len(node.board) * len(node.board[0])
 
-        if self.method == 'hamm':
+        if self.method == 'manh':
             for value in range(size - 1):
                 current_row, current_column = get_position(value, node.board)
                 goal_row, goal_column = get_position(value, self.goal_board)
-                score += abs(goal_row - current_row) + abs(goal_column - current_column)
+                if abs(goal_row - current_row) + abs(goal_column - current_column) != 0:
+                    score += abs(goal_row - current_row) + abs(goal_column - current_column)
             return score
         else:
             for value in range(size - 1):
@@ -31,18 +32,19 @@ class Astar:
         directions = ['L', 'R', 'U', 'D']
         LRUD_solution_sequence = []
         parents_queue = []
-        shortest_distance_equals = []
+        visited_children = []
         visited_boards = []
+        one_or_more_distances = []
+        solution_length = 0
 
-        shortest_distance_child = None
 
         depth = 0
         processed_nodes_stats = 0
 
-
         start_time = datetime.datetime.now()
         root = Node(self.starting_board, None, None)
         visited_nodes_stats = 1
+
 
         if root.board == self.goal_board:
             end_time = datetime.datetime.now()
@@ -56,28 +58,27 @@ class Astar:
             return LRUD_solution_sequence, solution_length, depth, exec_time, visited_nodes_stats, processed_nodes_stats
 
         else:
-            parents_queue.append(root)
-            shortest_distance = self.check_distance(root)
+            parents_queue.append([root, 'root node'])
+            shortest_distance = self.heuristic_distance(root)
             visited_boards.append(root.board)
             processed_nodes_stats += 1
 
         while parents_queue:
             depth += 1
-            shortest_distance_equals.clear()
+            visited_children.clear()
 
             for parent in parents_queue:
                 for direction in directions:
-                    child = parent.create_one_child(direction)
+                    child = parent[0].create_one_child(direction)
                     if child is not None:
-                        child_distance = self.check_distance(child)
+                        child_distance = self.heuristic_distance(child)
 
                         if child.board in visited_boards:
                             visited_nodes_stats += 1
 
-                        elif child.board not in visited_boards and child_distance < shortest_distance:
-                            shortest_distance = child_distance
-                            shortest_distance_child = child
-                            shortest_distance_equals.append(child)
+                        else:
+                            visited_children.append([child, child_distance])
+
                             visited_boards.append(child.board)
 
                             processed_nodes_stats += 1
@@ -85,27 +86,50 @@ class Astar:
 
             parents_queue.clear()
 
-            if shortest_distance != 0:
-                if len(shortest_distance_equals) > 1:
-                    for equal in shortest_distance_equals:
-                        parents_queue.append(equal)
+            if len(visited_children) >= 1:
+                minimum_child_distance = visited_children[0][1]
+
+                for child in visited_children:
+                    if child[1] < minimum_child_distance:
+                        minimum_child_distance = child[1]
+
+                for child in visited_children:
+                    if child[1] == minimum_child_distance:
+                        one_or_more_distances.append(child)
+
+                if minimum_child_distance != 0:
+                    if len(one_or_more_distances) > 1:
+                        for same_distance_child in one_or_more_distances:
+                            parents_queue.append(same_distance_child)
+                    else:
+                        parents_queue.append(one_or_more_distances[0])
                 else:
-                    parents_queue.append(shortest_distance_child)
-            else:
-                end_time = datetime.datetime.now()
-                exec_time = (end_time - start_time).total_seconds() * 1000
+                    end_time = datetime.datetime.now()
+                    exec_time = (end_time - start_time).total_seconds() * 1000
 
-                while shortest_distance_child:
-                    if shortest_distance_child.direction is not None:
-                        LRUD_solution_sequence.append(shortest_distance_child.direction)
-                    shortest_distance_child = shortest_distance_child.parent_node
-                LRUD_solution_sequence.reverse()
-                solution_length = len(LRUD_solution_sequence)
+                    for node in one_or_more_distances:
+                        if node[1] == minimum_child_distance:
+                            node_goal = node[0]
 
-                print('Solution found')
+                    while node_goal:
+                        if node_goal.direction is not None:
+                            LRUD_solution_sequence.append(node_goal.direction)
+                            print(node_goal.direction)
+                        node_goal = node_goal.parent_node
 
-                return LRUD_solution_sequence, solution_length, depth, exec_time,\
-                       visited_nodes_stats, processed_nodes_stats
+                    LRUD_solution_sequence.reverse()
+
+                    solution_length = len(LRUD_solution_sequence)
+
+                    print('Solution found')
+                    print(LRUD_solution_sequence)
+                    print(depth)
+                    print(exec_time)
+                    print(visited_nodes_stats)
+                    print(processed_nodes_stats)
+
+                    return LRUD_solution_sequence, solution_length, depth, exec_time, \
+                           visited_nodes_stats, processed_nodes_stats
 
         end_time = datetime.datetime.now()
         exec_time = (end_time - start_time).total_seconds() * 1000

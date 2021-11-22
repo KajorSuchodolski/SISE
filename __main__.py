@@ -101,7 +101,21 @@ def main():
                 f_stats.write(str(result[3]) + "\n")  # dlugosc procesu obliczeniowego w ms
 
         elif sequence == "hamm":
-            astr = Astar(to_solve_board, original_board, "hamm")
+            a_star_hamm = Astar(to_solve_board, original_board, "hamm")
+            result = a_star_hamm.a_star()
+
+            with open(args.solution, "w") as f_solution:
+                f_solution.write(str(result[1]) + "\n")  # dlugosc znalezionego rozwiazania
+                if result[0] is not None:
+                    LRUD_sequence = ''.join(map(str, result[0]))
+                    f_solution.write(LRUD_sequence)  # sekwencja liter
+
+            with open(args.stats, "w") as f_stats:
+                f_stats.write(str(result[1]) + "\n")  # dlugosc rozwiazania
+                f_stats.write(str(result[4]) + "\n")  # liczba stanow odwiedzonych
+                f_stats.write(str(result[5]) + "\n")  # liczba stanow przetworzonych
+                f_stats.write(str(result[2]) + "\n")  # glebokosc
+                f_stats.write(str(result[3]) + "\n")  # dlugosc procesu obliczeniowego w ms
 
         # astr.a_star()
 
