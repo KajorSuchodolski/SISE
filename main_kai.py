@@ -16,7 +16,7 @@ bfs = BFS(ORIGINAL_BOARD, GOAL, SEQUENCE)
 bfs_algorithm_solution = bfs.bfs_algorithm()[0]
 print(bfs_algorithm_solution)
 
-a_star_manh = Astar(ORIGINAL_BOARD, GOAL, "hamm")
-print(a_star_manh.a_star())
+# a_star_manh = Astar(ORIGINAL_BOARD, GOAL, "manh")
+# print(a_star_manh.a_star())
 
 

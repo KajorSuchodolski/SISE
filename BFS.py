@@ -1,5 +1,6 @@
 import datetime
 from Node import Node
+from time import perf_counter_ns as perf
 
 
 class BFS:
@@ -19,18 +20,17 @@ class BFS:
         depth = 0
         processed_nodes_stats = 0
 
-        start_time = datetime.datetime.now()
+        start_time = perf()
         root = Node(self.starting_board, None, None)
         visited_nodes_stats = 1
 
         if root.board == self.goal_board:
             print('Solution found')
 
-            end_time = datetime.datetime.now()
-            exec_time = (end_time - start_time).total_seconds() * 1000
+            exec_time = round((perf() - start_time) / 1000000, 3)
             LRUD_solution_sequence = None
 
-            return LRUD_solution_sequence, solution_length, depth, exec_time, visited_nodes_stats, processed_nodes_stats
+            return LRUD_solution_sequence, solution_length, depth, exec_time * 1000, visited_nodes_stats, processed_nodes_stats
 
         else:
             parents_queue.append(root)
@@ -64,10 +64,9 @@ class BFS:
                         solution_length += 1
 
                     LRUD_solution_sequence.reverse()
-                    end_time = datetime.datetime.now()
-                    exec_time = (end_time - start_time).total_seconds() * 1000
+                    exec_time = round((perf() - start_time) / 1000000, 3)
 
-                    return LRUD_solution_sequence, solution_length, depth, exec_time, \
+                    return LRUD_solution_sequence, solution_length - 1, depth, exec_time * 1000, \
                            visited_nodes_stats, processed_nodes_stats
 
                 else:
@@ -83,4 +82,4 @@ class BFS:
         solution_length = -1
         LRUD_solution_sequence = []
 
-        return LRUD_solution_sequence, solution_length, depth, exec_time, visited_nodes_stats, processed_nodes_stats
+        return solution_length, depth, exec_time * 1000, visited_nodes_stats, processed_nodes_stats

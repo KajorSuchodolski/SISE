@@ -8,7 +8,6 @@ class Astar:
         self.goal_board = goal_board
         self.method = method
 
-
     def manhattan_distance(self, node):
         score = 0
         size = len(node.board) * len(node.board[0])
