@@ -32,7 +32,7 @@ class Astar:
         directions = ['L', 'R', 'U', 'D']
         LRUD_solution_sequence = []
         parents_queue = []
-        visited_children = []
+        children_queue = []
         visited_boards = []
         one_or_more_distances = []
         solution_length = 0
@@ -65,7 +65,7 @@ class Astar:
 
         while parents_queue:
             depth += 1
-            visited_children.clear()
+            children_queue.clear()
 
             for parent in parents_queue:
                 for direction in directions:
@@ -77,8 +77,7 @@ class Astar:
                             visited_nodes_stats += 1
 
                         else:
-                            visited_children.append([child, child_distance])
-
+                            children_queue.append([child, child_distance])
                             visited_boards.append(child.board)
 
                             processed_nodes_stats += 1
@@ -86,14 +85,14 @@ class Astar:
 
             parents_queue.clear()
 
-            if len(visited_children) >= 1:
-                minimum_child_distance = visited_children[0][1]
+            if len(children_queue) >= 1:
+                minimum_child_distance = children_queue[0][1]
 
-                for child in visited_children:
+                for child in children_queue:
                     if child[1] < minimum_child_distance:
                         minimum_child_distance = child[1]
 
-                for child in visited_children:
+                for child in children_queue:
                     if child[1] == minimum_child_distance:
                         one_or_more_distances.append(child)
 
@@ -103,6 +102,8 @@ class Astar:
                             parents_queue.append(same_distance_child)
                     else:
                         parents_queue.append(one_or_more_distances[0])
+
+
                 else:
                     end_time = datetime.datetime.now()
                     exec_time = (end_time - start_time).total_seconds() * 1000
@@ -122,6 +123,7 @@ class Astar:
                     solution_length = len(LRUD_solution_sequence)
 
                     print('Solution found')
+
                     print(LRUD_solution_sequence)
                     print(depth)
                     print(exec_time)
