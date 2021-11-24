@@ -2,7 +2,7 @@ from functions import ZERO_POSITION, zero_init
 
 
 class Node:
-    def __init__(self, board, direction, parent_node):
+    def __init__(self, board, direction, parent_node, distance):
         self.board = board
         self.children = {}
         self.direction = direction
@@ -12,13 +12,14 @@ class Node:
     def create_one_child(self, direction):
         new_board = self.move(direction)
         if new_board is not None:
-            node = Node(new_board, direction, self)
+            node = Node(new_board, direction, self, None)
             return node
         else:
             return None         # jesli pozycja zera nie spelnia warunkow do stworzenia dziecka - zwraca None
 
     def move(self, direction, flag=False):
         zero_init(self.board)
+
         row_zero = ZERO_POSITION[0]   # rząd w ktorym jest zero
         col_zero = ZERO_POSITION[1]   # kolumna w ktorej jest zero
 

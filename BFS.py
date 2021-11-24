@@ -21,7 +21,7 @@ class BFS:
         processed_nodes_stats = 0
 
         start_time = datetime.datetime.now()
-        root = Node(self.starting_board, None, None)
+        root = Node(self.starting_board, None, None, None)
         visited_nodes_stats = 1
 
         if root.board == self.goal_board:

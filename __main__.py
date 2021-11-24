@@ -21,7 +21,7 @@ def main():
 
     solve_board = create_fifteen_table(args.input)
     to_solve_board, rows, columns = solve_board[0], solve_board[1], solve_board[2]
-    original_board = create_goal_board(rows, columns)
+    original_board = [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [0, 13, 14, 15]]
     if args.sequence not in ("manh", "hamm"):
         sequence = tuple(args.sequence.upper())
     elif args.sequence == "manh":
@@ -39,8 +39,7 @@ def main():
         raise Exception("Wrong sequence choice")
 
 
-    if args.algorithm == "dfs":
-        print('Doesnt work yet')
+    # if args.algorithm == "dfs":
         # dfs = DFS(to_solve_board, original_board, sequence)
         # dfs.dfs()
         #
@@ -83,9 +82,9 @@ def main():
         astr = None
 
         if sequence == "manh":
-            a_star_manh = Astar(to_solve_board, original_board, "manh")
+            a_star_manh = Astar("manh", to_solve_board, original_board,)
 
-            result = a_star_manh.a_star()
+            result = a_star_manh.solve()
 
             with open(args.solution, "w") as f_solution:
                 f_solution.write(str(result[1]) + "\n")  # dlugosc znalezionego rozwiazania
