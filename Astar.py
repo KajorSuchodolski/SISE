@@ -22,7 +22,15 @@ class Astar:
         return score
 
     def compute_hamming_h(self, node):
-        # do zrobienia!
+        score = 0
+        board_size = len(node.board) * len(node.board[0])
+
+        for value in range(0, board_size - 1):
+            goal_row, goal_column = get_position(value, self.goal_board)
+            current_row, current_column = get_position(value, node.board)
+            if abs(goal_row - current_row) + abs(goal_column - current_column) != 0:
+                score += 1
+        return score
 
     def compute_cost_g(self, node):
         cost = 0
@@ -57,7 +65,8 @@ class Astar:
         start_time = datetime.datetime.now()
 
         root = Node(self.starting_board, None, None, None)
-        root.distance = self.calculate_f_value(root)
+        root.distance = self.calculate_f_value(root, self.heuristic)
+
         if root.board == self.goal_board:
             print('Solution found.')
             end_time = datetime.datetime.now()
