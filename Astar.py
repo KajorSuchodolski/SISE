@@ -21,6 +21,9 @@ class Astar:
             score += abs(iGoal - iActual) + abs(jGoal - jActual)
         return score
 
+    def compute_hamming_h(self, node):
+        # do zrobienia!
+
     def compute_cost_g(self, node):
         cost = 0
         while node.direction is not None:
@@ -32,9 +35,12 @@ class Astar:
     def state(self, node):
         return str(node)
 
-    def calculate_f_value(self, node):
+    def calculate_f_value(self, node, heuristic):
         g = self.compute_cost_g(node)
-        h = self.compute_manhattan_h(node)
+        if heuristic == "manh":
+            h = self.compute_manhattan_h(node)
+        else:
+            h = self.compute_hamming_h(node)
 
         return g + h
 
@@ -112,7 +118,7 @@ class Astar:
                         visited_nodes_stats += 1
 
                     else:
-                        child.distance = self.calculate_f_value(child)
+                        child.distance = self.calculate_f_value(child, self.heuristic)
                         parents_pool.append(child)
                         # seen.add(self.state(child))
                         # visited_boards.append(child.board)
@@ -123,7 +129,7 @@ class Astar:
             visited_nodes_stats += 1
 
             if len(parents_pool) == 0:
-                depth_last = self.calculate_f_value(current_parent)
+                depth_last = self.compute_cost_g(current_parent)
 
 
         end_time = datetime.datetime.now()
